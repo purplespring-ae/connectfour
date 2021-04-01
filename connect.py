@@ -1,6 +1,3 @@
-import itertools
-
-
 def play_game():
 
     def construct_board(r, c, blank_spot):
