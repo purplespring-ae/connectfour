@@ -28,16 +28,18 @@ def play_game():
             if not r == len(board)-1:
                 print(h_separator)
 
-    def validate_col(col):
+    def validate_col(col, verbose=False):
         if col > len(board[0]) or col < 0:
-            print("That column doesn't exist on the board.")
+            if verbose:
+                print(f"Column {col} doesn't exist on the board.")
             return False
         else:
             return True
 
-    def validate_row(row):
+    def validate_row(row, verbose=False):
         if row > len(board) or row < 0:
-            print("That row doesn't exist on the board.")
+            if verbose:
+                print(f"Row {row} doesn't exist on the board.")
             return False
         else:
             return True
@@ -82,12 +84,33 @@ def play_game():
                         result.append((r, c))
         return result
 
+    def check_win():
+        def check_row():
+            for r in range(len(board)):
+                for c in range(len(board[r])):
+                    # print(f"Checking {r}, {c}")
+                    this_spot = board[r][c]
+                    print(this_spot)
+                    neighbours = get_neighbours(r, c)
+
+        def check_col():
+            pass
+
+        def check_diag_r():
+            pass
+
+        def check_diag_l():
+            pass
+
+        check_row()
+
     blank_spot = " . "
     players = [" X ", " O "]
     current_player = 0
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
 
+    check_win()
     # make_move(2, current_player)
     # current_player = toggle_player(current_player)
     # say_player()
