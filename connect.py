@@ -29,7 +29,7 @@ def play_game():
                 print(h_separator)
 
     def validate_col(col, verbose=False):
-        if col > len(board[0]) or col < 0:
+        if col > len(board[0])-1 or col < 0:
             if verbose:
                 print(f"Column {col} doesn't exist on the board.")
             return False
@@ -37,7 +37,7 @@ def play_game():
             return True
 
     def validate_row(row, verbose=False):
-        if row > len(board) or row < 0:
+        if row > len(board)-1 or row < 0:
             if verbose:
                 print(f"Row {row} doesn't exist on the board.")
             return False
@@ -67,11 +67,9 @@ def play_game():
         board[irow][icol] = players[player]
         draw_board(board)
 
-    def say_player():
-        print(f"It's {players[current_player]}'s turn.")
-
     def toggle_player(last_player):
         new_player = 1 - last_player
+        print(f"It's {players[new_player]}'s turn.")
         return new_player
 
     def get_neighbours(irow, icol):
@@ -90,8 +88,14 @@ def play_game():
                 for c in range(len(board[r])):
                     # print(f"Checking {r}, {c}")
                     this_spot = board[r][c]
-                    print(this_spot)
-                    neighbours = get_neighbours(r, c)
+                    if this_spot in players:
+                        print(this_spot)
+                        neighbours = get_neighbours(r, c)
+                        for n in neighbours:
+                            checkr, checkc = n[0], n[1]
+                            checkval = board[checkr][checkc]
+                            if this_spot == checkval:
+                                print("That matches!")
 
         def check_col():
             pass
@@ -110,13 +114,15 @@ def play_game():
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
 
+    make_move(5, current_player)
+    current_player = toggle_player(current_player)
+    make_move(2, current_player)
+    current_player = toggle_player(current_player)
+    make_move(5, current_player)
+    current_player = toggle_player(current_player)
+    make_move(3, current_player)
+    current_player = toggle_player(current_player)
     check_win()
-    # make_move(2, current_player)
-    # current_player = toggle_player(current_player)
-    # say_player()
-    # make_move(2, current_player)
-    # current_player = toggle_player(current_player)
-    # say_player()
 
 
 if __name__ == "__main__":
