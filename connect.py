@@ -35,6 +35,13 @@ def play_game():
         else:
             return True
 
+    def validate_row(row):
+        if row > len(board) or row < 0:
+            print("That row doesn't exist on the board.")
+            return False
+        else:
+            return True
+
     def list_col(icol):
         if not validate_col(icol):
             return False
@@ -65,20 +72,28 @@ def play_game():
         new_player = 1 - last_player
         return new_player
 
+    def get_neighbours(irow, icol):
+        result = []
+        # try 3x3 square including (irow-1, icol-1) to (irow+1, icol+1) excluding self
+        for r in range(irow-1, irow+2):
+            if validate_row(r):
+                for c in range(icol-1, icol+2):
+                    if validate_col(c) and not (icol == c and irow == r):
+                        result.append((r, c))
+        return result
+
     blank_spot = " . "
     players = [" X ", " O "]
     current_player = 0
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
 
-    # print(col_floor(2))
-    make_move(2, current_player)
-    current_player = toggle_player(current_player)
-    say_player()
-    make_move(2, current_player)
-    current_player = toggle_player(current_player)
-    say_player()
-    # print(col_floor(2))
+    # make_move(2, current_player)
+    # current_player = toggle_player(current_player)
+    # say_player()
+    # make_move(2, current_player)
+    # current_player = toggle_player(current_player)
+    # say_player()
 
 
 if __name__ == "__main__":
