@@ -82,31 +82,45 @@ def play_game():
                         result.append((r, c))
         return result
 
+    def get_neighbours_matching(irow, icol):
+        # currently not used for anything - possibly useful for check_win?
+        result = []
+        for r in range(len(board)):
+            for c in range(len(board[r])):
+                this_spot = board[r][c]
+                if this_spot in players:
+                    neighbours = get_neighbours(r, c)
+                    for n in neighbours:
+                        checkr, checkc = n[0], n[1]
+                        checkval = board[checkr][checkc]
+                        if this_spot == checkval:
+                            print(
+                                f"Matching neighbour for {checkval} found at ({checkr},{checkc}).")
+                            result.append((checkr, checkc))
+
     def check_win():
-        def check_row():
-            for r in range(len(board)):
-                for c in range(len(board[r])):
-                    # print(f"Checking {r}, {c}")
-                    this_spot = board[r][c]
-                    if this_spot in players:
-                        print(this_spot)
-                        neighbours = get_neighbours(r, c)
-                        for n in neighbours:
-                            checkr, checkc = n[0], n[1]
-                            checkval = board[checkr][checkc]
-                            if this_spot == checkval:
-                                print("That matches!")
+        '''
+        to cut down on needless checking, once a matching neighbour is found,
+        continue checking in that direction until it's not a match
+        Start with possible_directions = eg ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
+        eliminate directions in turn
 
-        def check_col():
-            pass
+        ? only check the most recently added spot, as there can't be a win from
+        the start and no spots can move.
 
-        def check_diag_r():
-            pass
-
-        def check_diag_l():
-            pass
-
-        check_row()
+        once game is fully running: allow AI to see three-in-a-rows and block them. first stage
+        of a rudimentary computer player
+        '''
+        possible_directions = {
+            "nw": {"delta_r": -1, "delta_c": -1, "rmax": , "cmax": , "matches": []},
+            "n": {"delta_r": -1, "delta_c": 0, "rmax": , "cmax":  "matches": []},
+            "ne": {"delta_r": -1, "delta_c": +1, "rmax": , "cmax":  "matches": []},
+            "e": {"delta_r": 0, "delta_c": +1, "rmax":, "cmax":  "matches": []},
+            "se": {"delta_r": +1, "delta_c": +1, "rmax":, "cmax":  "matches": []},
+            "s": {"delta_r": +1, "delta_c": 0, "rmax": , "cmax":  "matches": []},
+            "sw": {"delta_r": +1, "delta_c": -1, "rmax": , "cmax":  "matches": []},
+            "w": {"delta_r": 0, "delta_c": +1, "rmax": , "cmax":  "matches": []},
+        }
 
     blank_spot = " . "
     players = [" X ", " O "]
