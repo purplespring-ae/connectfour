@@ -33,6 +33,10 @@ def play_game():
             if verbose:
                 print(f"Column {col} doesn't exist on the board.")
             return False
+        elif not col.count(blank_spot) == 0:
+            if verbose:
+                print(f"Column {col} is full.")
+            return False
         else:
             return True
 
@@ -50,7 +54,6 @@ def play_game():
         result = []
         for r in range(len(board)):
             result.append(board[r][icol])
-        # print(result)
         return(result)
 
     def col_floor(icol):
@@ -128,6 +131,8 @@ def play_game():
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
 
+
+    # TEST MOVES
     make_move(5, current_player)
     current_player = toggle_player(current_player)
     make_move(2, current_player)
