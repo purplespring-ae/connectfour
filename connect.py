@@ -65,11 +65,14 @@ def play_game():
         return len(col)-1
 
     def make_move(icol, player):
+        # TODO: if players[1], pick a random column
         if not validate_col(icol):
             return False
         irow = col_floor(icol)
         board[irow][icol] = players[player]
         draw_board(board)
+        result = check_win(icol, irow)
+        return result
 
     def toggle_player(last_player):
         new_player = 1 - last_player
@@ -95,6 +98,7 @@ def play_game():
             "W": {"delta_r": 0, "delta_c": +1, "opp": "E"},
         }
         checked_directions = []
+        match_val = board[check_r][check_c]
 
         def check_direction(from_r, from_c, dir_):
             # set up vector and choose first target
@@ -102,7 +106,6 @@ def play_game():
             delta_c = possible_directions[dir_]["delta_c"]
             target_r, target_c = from_r + delta_r, check_c + delta_c
             # loop-breaking vars
-            match_val = board[from_r][from_c]
             dir_exhausted = False
             num_connect = 0
 
@@ -130,37 +133,39 @@ def play_game():
             opp_match = check_direction(check_r, check_c, opp_dir)
             checked_directions.append(opp_dir)
             if dir_match + opp_match >= 3:
-                print(
-                    "SOMEONE WON THE GAME I DON'T KNOW WHO YET OR WHAT TO DO ABOUT IT THOUGH")
+                print(f"{match_val} won the game!")
+                return match_val
                 break
             else:
                 pass
+        return dir_match + opp_match
 
     def test_moves():
-        make_move(5, current_player)
-        current_player = toggle_player(current_player)
-        make_move(2, current_player)
-        current_player = toggle_player(current_player)
-        make_move(5, current_player)
-        current_player = toggle_player(current_player)
-        make_move(3, current_player)
-        current_player = toggle_player(current_player)
-        make_move(5, current_player)
-        current_player = toggle_player(current_player)
-        make_move(2, current_player)
-        current_player = toggle_player(current_player)
-        make_move(5, current_player)
-        current_player = toggle_player(current_player)
-        make_move(2, current_player)
-        current_player = toggle_player(current_player)
-        check_win(4, 5)
+        player0_spots = [(5, 0), (4, 0), (4, 1), (4, 3), (3, 2), (2, 3)]
+        player1_spots = [(5, 1), (5, 2), (4, 2), (5, 3), (3, 3), (3, 0)]
+
+        for spot in player0_spots:
+            r, c = spot[0], spot[1]
+            board[r][c] = players[0]
+        for spot in player1_spots:
+            r, c = spot[0], spot[1]
+            board[r][c] = players[1]
+        draw_board(board)
+        check_win(3, 2)
 
     blank_spot = " . "
     players = [" X ", " O "]
     current_player = 0
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
-    # test_moves()
+    winner = None
+
+    while not winner:
+        choose_row = int(input(
+            "Select a row number (count from zero at the far left):\n"))
+        go = make_move(choose_row, current_player)
+        # TODO: not switching player correctly
+        toggle_player(current_player)
 
 
 if __name__ == "__main__":
