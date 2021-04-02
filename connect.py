@@ -75,62 +75,61 @@ def play_game():
         print(f"It's {players[new_player]}'s turn.")
         return new_player
 
-     def check_win(r, c):
-        '''
-        ? only check the most recently added spot, as there can't be a win from
-        the start and no spots can move.
+    def check_win(r, c):
+    '''
+    ? only check the most recently added spot, as there can't be a win from
+    the start and no spots can move.
 
-        once game is fully running: allow AI to see three-in-a-rows and block them. first stage
-        of a rudimentary computer player
-        '''
-        possible_directions = {
-            "NW": {"delta_r": -1, "delta_c": -1},
-            "N": {"delta_r": -1, "delta_c": 0},
-            "NE": {"delta_r": -1, "delta_c": +1},
-            "E": {"delta_r": 0, "delta_c": +1},
-            "SE": {"delta_r": +1, "delta_c": +1},
-            "S": {"delta_r": +1, "delta_c": 0},
-            "SW": {"delta_r": +1, "delta_c": -1},
-            "W": {"delta_r": 0, "delta_c": +1},
-        }
+    once game is fully running: allow AI to see three-in-a-rows and block them. first stage
+    of a rudimentary computer player
+    '''
+    possible_directions = {
+        "NW": {"delta_r": -1, "delta_c": -1},
+        "N": {"delta_r": -1, "delta_c": 0},
+        "NE": {"delta_r": -1, "delta_c": +1},
+        "E": {"delta_r": 0, "delta_c": +1},
+        "SE": {"delta_r": +1, "delta_c": +1},
+        "S": {"delta_r": +1, "delta_c": 0},
+        "SW": {"delta_r": +1, "delta_c": -1},
+        "W": {"delta_r": 0, "delta_c": +1},
+    }
 
-        # start_from should be tuple in the format (r,c). add validation if it causes issues
-        check_r, check_c = r, c
-        match_val = board[check_r][check_c]
+    # start_from should be tuple in the format (r,c). add validation if it causes issues
+    check_r, check_c = r, c
+    match_val = board[check_r][check_c]
 
-        for dir, vals in possible_directions.items():
+    for dir, vals in possible_directions.items():
 
-            delta_r = possible_directions[dir]["delta_r"]
-            delta_c = possible_directions[dir]["delta_c"]
-            target_r, target_c = check_r + delta_r, check_c + delta_c
-            dir_exhausted = False
-            num_connect = 1
+        delta_r = possible_directions[dir]["delta_r"]
+        delta_c = possible_directions[dir]["delta_c"]
+        target_r, target_c = check_r + delta_r, check_c + delta_c
+        dir_exhausted = False
+        num_connect = 1
 
-            while not dir_exhausted and num_connect < 4:
-                if not validate_row(target_r) or not validate_col(target_c) or not board[target_r][target_c] == match_val:
-                    # print(f"{start_from} has no neighbours to the {dir}.")
-                    dir_exhausted = True
-                    break
-                else:
-                    print(
-                        f"{target_r},{target_c} is a connect to the {dir} for {check_r},{check_c}.")
-                    num_connect += 1
-                    # adjust position to continue in that direction
-                    target_r, target_c = target_r + delta_r, target_c + delta_c
-                continue
-            if num_connect == 4:
+        while not dir_exhausted and num_connect < 4:
+            if not validate_row(target_r) or not validate_col(target_c) or not board[target_r][target_c] == match_val:
+                # print(f"{start_from} has no neighbours to the {dir}.")
+                dir_exhausted = True
+                break
+            else:
                 print(
-                    "SOMEONE WON THE GAME I DON'T KNOW WHO YET OR WHAT TO DO ABOUT IT THOUGH")
-            
-            # TODO: currently detects connects all going in the same compass direction - 
-            # need to combine opposite directions to properly check for win
+                    f"{target_r},{target_c} is a connect to the {dir} for {check_r},{check_c}.")
+                num_connect += 1
+                # adjust position to continue in that direction
+                target_r, target_c = target_r + delta_r, target_c + delta_c
+            continue
+        if num_connect == 4:
+            print(
+                "SOMEONE WON THE GAME I DON'T KNOW WHO YET OR WHAT TO DO ABOUT IT THOUGH")
+
+        # TODO: currently detects connects all going in the same compass direction -
+        # need to combine opposite directions to properly check for win
 
     blank_spot = " . "
     players = [" X ", " O "]
     current_player = 0
     board = construct_board(r=6, c=7, blank_spot=blank_spot)
     draw_board(board)
-
 
     # TEST MOVES
     make_move(5, current_player)
